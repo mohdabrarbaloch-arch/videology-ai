@@ -3,11 +3,13 @@ from app.config import get_settings
 
 router = APIRouter()
 
-@router.get('/')
+
+@router.get("/")
 async def health_check():
     settings = get_settings()
-    return {'status': 'healthy', 'service': 'videology-backend', 'model': settings.ai_model}
-
-@router.get('/ready')
-async def readiness_check():
-    return {'status': 'ready'}
+    return {
+        "status": "healthy",
+        "service": "videology-backend",
+        "openai_configured": bool(settings.openai_api_key),
+        "supabase_configured": bool(settings.supabase_url),
+    }
